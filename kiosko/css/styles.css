@@ -1,0 +1,339 @@
+/* ===== Reset sencillo ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ===== Backgrounds ===== */
+.bg-base {
+  background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+  color: #e5e7eb;
+  min-height: 100vh;
+}
+
+/* ===== Layouts ===== */
+.center-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Cards ===== */
+.card {
+  background: #020617;
+  border-radius: 1rem;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+  border: 1px solid #1f2937;
+}
+.card-sm {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* ===== Typography ===== */
+.title {
+  margin: 0 0 0.5rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+.subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  text-align: center;
+}
+.label {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* ===== Inputs ===== */
+.input {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid #1f2937;
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+}
+.input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+}
+.btn-primary {
+  width: 100%;
+  margin-top: 1.5rem;
+  background: #38bdf8;
+  color: #020617;
+}
+.btn-primary:hover {
+  background: #0ea5e9;
+}
+.btn-success {
+  width: 100%;
+  margin-top: 1.5rem;
+  background: #22c55e;
+  color: #022c22;
+}
+.btn-success:hover {
+  background: #16a34a;
+}
+.btn-ghost {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+.btn-ghost:hover {
+  border-color: #f97373;
+  color: #fecaca;
+}
+
+/* ===== Messages ===== */
+.msg {
+  font-size: 0.85rem;
+  min-height: 1rem;
+  margin-top: 0.7rem;
+}
+.msg-error {
+  color: #f97373;
+}
+.msg-ok {
+  color: #4ade80;
+}
+
+/* ===== Links ===== */
+.link-text {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+.link {
+  color: #38bdf8;
+  text-decoration: none;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Header / brand ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(15,23,42,0.95);
+  border-bottom: 1px solid #1f2937;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.9rem;
+  background: radial-gradient(circle at 20% 20%, #38bdf8, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+.brand-name {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+.brand-sub {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* ===== User info ===== */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+.user-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+.user-name {
+  color: #c4b5fd;
+}
+
+/* ===== Main layout ===== */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(260px, 1.4fr);
+  gap: 1.5rem;
+  padding: 1.5rem 2rem 2rem;
+}
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Panels ===== */
+.panel {
+  background: rgba(15,23,42,0.9);
+  border-radius: 1rem;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #1f2937;
+  box-shadow: 0 20px 35px rgba(0,0,0,0.6);
+}
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.panel-subtitle {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+.panel-body {
+  margin-top: 0.5rem;
+}
+
+/* ===== Chips ===== */
+.chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  background: #020617;
+}
+
+/* ===== Books grid ===== */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+.book-card {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  border-radius: 0.9rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #1f2937;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 140px;
+}
+.book-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.book-meta {
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+.book-type {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4ade80;
+}
+.badge-stock {
+  font-size: 0.75rem;
+  color: #bbf7d0;
+}
+
+/* ===== Notificaciones ===== */
+.empty-msg {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+.notif-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.notif-item {
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.7rem;
+  background: #020617;
+  border: 1px solid #1f2937;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.notif-icon {
+  font-size: 1.1rem;
+  margin-top: 0.1rem;
+}
+.notif-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.notif-msg {
+  color: #9ca3af;
+}
+.notif-time {
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.4);
+  color: #7dd3fc;
+  margin-left: 0.4rem;
+}

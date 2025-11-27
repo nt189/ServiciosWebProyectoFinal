@@ -1,12 +1,13 @@
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models; // <--- ESTE ES NUEVO E IMPORTANTE
+using Microsoft.OpenApi.Models; // <- ya lo tenías
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CONFIGURACI�N DE SEGURIDAD JWT (Esto ya lo ten�as bien) ---
+// =======================
+//   AUTENTICACIÓN JWT
+// =======================
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -18,30 +19,55 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+            )
         };
     });
 
+// =======================
+//   CONTROLADORES
+// =======================
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// --- CONFIGURACI�N DE SWAGGER CON BOT�N DE CANDADO (NUEVO) ---
-// Reemplazamos el AddSwaggerGen() simple por este completo:
+// =======================
+//          CORS
+// =======================
+// Política para permitir que tu front (login.html, registro.html, index.html)
+// pueda llamar a http://localhost:5224 sin que el navegador bloquee por CORS.
+const string DevCors = "DevCors";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: DevCors, policy =>
+    {
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+        // Si quieres limitar:
+        // .WithOrigins("http://localhost:5500")
+        //   .AllowAnyHeader()
+        //   .AllowAnyMethod();
+    });
+});
+
+// =======================
+//        SWAGGER
+// =======================
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "KioscoDigital.WebAPI", Version = "v1" });
 
-    // 1. Definimos que vamos a usar Tokens (Bearer)
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Autenticaci�n JWT. Escribe 'Bearer' [espacio] y tu token.\r\n\r\nEjemplo: \"Bearer 12345abcdef\"",
+        Description = "Autenticación JWT. Escribe 'Bearer' [espacio] y tu token.\r\n\r\nEjemplo: \"Bearer 12345abcdef\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
 
-    // 2. Le decimos a Swagger que use esa seguridad en los candados
     c.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
         {
@@ -63,17 +89,24 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// =======================
+//      PIPELINE HTTP
+// =======================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection(); // Comentado (Correcto para el puerto 5224)
+// OJO: lo tienes comentado para usar solo HTTP en 5224, está bien así
+// app.UseHttpsRedirection();
 
-app.UseAuthentication(); // 1. Identificar (Correcto)
-app.UseAuthorization();  // 2. Autorizar (Correcto)
+// 🔹 PRIMERO CORS (antes de Auth / Authorization)
+app.UseCors(DevCors);
+
+// Luego autenticación/autorización
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

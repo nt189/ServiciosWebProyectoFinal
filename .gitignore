@@ -8,3 +8,5 @@
 /Microservicios/KioscoDigital.WebAPI/bin/Debug/net8.0/firebase_key.json
 
 /webhook/weebhook-5b7c6-firebase-adminsdk-fbsvc-f8d7a12981.json
+
+/APIgateway/node_modules

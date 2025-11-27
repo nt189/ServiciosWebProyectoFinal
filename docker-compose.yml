@@ -1,0 +1,40 @@
+services:
+  apigateway:
+    build: ./APIgateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./APIgateway:/app
+    restart: unless-stopped
+
+  webhook:
+    build: ./webhook
+    ports:
+      - "5004:5002"
+    volumes:
+      - ./webhook:/app
+    restart: unless-stopped
+
+  php-api:
+    build: ./Microservicios/Gestion de patrocinadores y compra
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./Microservicios/Gestion de patrocinadores y compra:/var/www/html
+    restart: unless-stopped
+
+  python-api:
+    build: ./Microservicios/Gestion_entrega_api
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./Microservicios/Gestion_entrega_api:/app
+    restart: unless-stopped
+
+  dotnet-api:
+    build: ./Microservicios/KioscoDigital.WebAPI
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./Microservicios/KioscoDigital.WebAPI:/app
+    restart: unless-stopped

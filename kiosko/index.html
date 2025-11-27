@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kiosko Digital - Biblioteca</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-base">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-logo">KD</div>
+      <div>
+        <div class="brand-name">Kiosko Digital</div>
+        <div class="brand-sub">Biblioteca interactiva</div>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div>
+        <div class="user-label">Conectado como</div>
+        <div class="user-name" id="userName">Usuario...</div>
+      </div>
+      <button class="btn btn-ghost" id="logoutBtn">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Panel catálogo -->
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Catálogo de títulos</h2>
+          <p class="panel-subtitle">Libros disponibles en el kiosko</p>
+        </div>
+        <div class="chips">
+          <span class="chip">Libros</span>
+          <span class="chip">Periódicos</span>
+          <span class="chip">Revistas</span>
+        </div>
+      </div>
+
+      <div id="booksContainer" class="panel-body">
+        <p class="empty-msg">Cargando catálogo...</p>
+      </div>
+    </section>
+
+    <!-- Panel notificaciones -->
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">
+            Notificaciones
+            <span class="pill">Nuevos títulos en tiempo real</span>
+          </h2>
+          <p class="panel-subtitle">
+            Cuando se agregue un nuevo título al sistema aparecerá aquí automáticamente.
+          </p>
+        </div>
+      </div>
+
+      <ul class="notif-list" id="notifList"></ul>
+      <p class="empty-msg" id="notifEmpty">Sin notificaciones aún.</p>
+    </section>
+  </main>
+
+  <!-- JS de la página (catálogo + notificaciones) -->
+  <script type="module" src="js/index.js"></script>
+</body>
+</html>
