@@ -1,0 +1,6 @@
+@KioscoDigital.WebAPI_HostAddress = http://localhost:5224
+
+GET {{KioscoDigital.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

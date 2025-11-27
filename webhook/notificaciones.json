@@ -1,0 +1,12 @@
+{
+  "notificaciones": {
+    "-Khs72s81Js7d": {
+      "tipo": "nuevo_titulo",
+      "titulo": "El Quijote",
+      "categoria": "literatura",
+      "mensaje": "Se agregó un nuevo libro: El Quijote",
+      "fecha": "2025-11-26T22:00:00",
+      "visto": false
+    }
+  }
+}
