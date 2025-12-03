@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Familia\\Documents\\Diego\\Servicios web\\Proyecto\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj": {}
+    "C:\\SW\\Proyecto\\Microservicios\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Familia\\Documents\\Diego\\Servicios web\\Proyecto\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj": {
+    "C:\\SW\\Proyecto\\Microservicios\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Familia\\Documents\\Diego\\Servicios web\\Proyecto\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj",
+        "projectUniqueName": "C:\\SW\\Proyecto\\Microservicios\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj",
         "projectName": "KioscoDigital.WebAPI",
-        "projectPath": "C:\\Users\\Familia\\Documents\\Diego\\Servicios web\\Proyecto\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj",
-        "packagesPath": "C:\\Users\\Familia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Familia\\Documents\\Diego\\Servicios web\\Proyecto\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI\\obj\\",
+        "projectPath": "C:\\SW\\Proyecto\\Microservicios\\KioscoDigital.WebAPI\\KioscoDigital.WebAPI.csproj",
+        "packagesPath": "C:\\Users\\DeskEchable\\.nuget\\packages\\",
+        "outputPath": "C:\\SW\\Proyecto\\Microservicios\\KioscoDigital.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Familia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DeskEchable\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -86,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

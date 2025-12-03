@@ -9,7 +9,9 @@ app.use(cors());
 app.use(express.json());
 
 const MICROSERVICES = {
-  kiosco: 'http://localhost:5224/api'
+  kiosco: 'http://localhost:5224/api',
+  gpc: 'http://localhost:5002', 
+  contenidos: 'http://localhost:5003', 
 };
 
 app.use((req, res, next) => {
@@ -240,10 +242,6 @@ app.delete('/contenidos/:id', async (req, res) => {
   }
 });
 
-
-// =============================
-// KioscoDigital.WebAPI: Usuarios
-// =============================
 app.post('/usuarios/registro', async (req, res) => {
   try {
     const response = await axios.post(`${MICROSERVICES.kiosco}/Usuarios/registro`, req.body);
@@ -271,9 +269,6 @@ app.put('/usuarios/notificaciones/:usuarioId', async (req, res) => {
   }
 });
 
-// ==================================
-// KioscoDigital.WebAPI: Publicaciones
-// ==================================
 app.post('/publicaciones/agregar', async (req, res) => {
   try {
     const response = await axios.post(`${MICROSERVICES.kiosco}/Publicaciones/agregar`, req.body);
@@ -292,9 +287,6 @@ app.get('/publicaciones/catalogo', async (req, res) => {
   }
 });
 
-// ==================================
-// KioscoDigital.WebAPI: Suscripciones
-// ==================================
 function authHeader(req) {
   const token = req.headers['authorization'] || req.headers['Authorization'];
   return token ? { Authorization: token } : {};
