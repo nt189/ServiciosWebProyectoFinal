@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = "http://localhost:3000";
 
 const registerForm = document.getElementById("registerForm");
 const registerError = document.getElementById("registerError");
@@ -23,7 +23,7 @@ if (registerForm) {
         password: password
       };
 
-      const resp = await fetch(`${API_BASE}/Usuarios/registro`, {
+      const resp = await fetch(`${API_BASE}/usuarios/registro`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
