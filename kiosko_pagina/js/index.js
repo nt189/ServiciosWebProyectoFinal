@@ -1,11 +1,18 @@
 // ===== Config locales =====
-const API_CONTENIDOS = "http://localhost:3000"; // Flask contenidos
+const API_CONTENIDOS = "http://localhost:3000"; // API Gateway base
 
 const userNameSpan = document.getElementById("userName");
 const logoutBtn = document.getElementById("logoutBtn");
 const booksContainer = document.getElementById("booksContainer");
 const notifList = document.getElementById("notifList");
 const notifEmpty = document.getElementById("notifEmpty");
+const purchasesContainer = document.getElementById("purchasesContainer");
+const purchasesEmpty = document.getElementById("purchasesEmpty");
+
+// Cache del cliente
+let catalogCache = [];
+let purchasedByUser = [];
+let purchasedIsbns = new Set();
 
 // ===== Sesión =====
 function ensureSession() {
@@ -41,6 +48,7 @@ async function loadCatalog() {
 
     const data = await resp.json();
     const lista = data.contenidos || [];
+    catalogCache = lista;
 
     if (!lista.length) {
       booksContainer.innerHTML =
@@ -61,6 +69,9 @@ async function loadCatalog() {
       const categoria = c.categoria || "general";
       const precio = c.precio ?? 0;
       const stock = c.stock ?? 0;
+      const isbn = (c.isbn || "").toString();
+      const isLibro = (c.tipo === "libro");
+      const yaComprado = isbn ? purchasedIsbns.has(isbn.toUpperCase()) : false;
 
       card.innerHTML = `
         <div class="book-type">${tipo.toUpperCase()}</div>
@@ -70,6 +81,16 @@ async function loadCatalog() {
         <div class="book-meta">Precio: $${precio} MXN</div>
         <div class="book-meta badge-stock">Stock: ${stock}</div>
       `;
+      if (isLibro) {
+        const buyBtn = document.createElement("button");
+        buyBtn.className = "btn btn-primary";
+        buyBtn.textContent = yaComprado ? "Comprado" : "Comprar";
+        buyBtn.disabled = yaComprado || !isbn || stock <= 0;
+        buyBtn.addEventListener("click", async () => {
+          await comprarLibro({ titulo, precio, isbn });
+        });
+        card.appendChild(buyBtn);
+      }
       grid.appendChild(card);
     });
 
@@ -154,6 +175,118 @@ onChildAdded(notifRef, (snapshot) => {
   }
 });
 
+// ===== Compras =====
+async function loadMyPurchases() {
+  if (!purchasesContainer) return;
+  try {
+    const nombre = localStorage.getItem("nombreUsuario") || "";
+    purchasedByUser = [];
+    purchasedIsbns = new Set();
+
+    const resp = await fetch(`${API_CONTENIDOS}/compras`);
+    if (!resp.ok) throw new Error("Error al cargar compras");
+    const data = await resp.json();
+    const comprasMap = data || {};
+
+    Object.entries(comprasMap).forEach(([isbnKey, compras]) => {
+      if (!compras || typeof compras !== 'object') return;
+      Object.values(compras).forEach((cmp) => {
+        const comprador = cmp?.Comprador || cmp?.comprador || "";
+        if (comprador === nombre) {
+          purchasedByUser.push({
+            isbn: isbnKey,
+            precio: cmp?.Precio ?? cmp?.precio ?? 0,
+            fecha: cmp?.FechaCompra || cmp?.fechaCompra || null
+          });
+          purchasedIsbns.add((isbnKey || "").toString().toUpperCase());
+        }
+      });
+    });
+
+    renderPurchases();
+  } catch (err) {
+    console.error(err);
+    if (purchasesContainer)
+      purchasesContainer.innerHTML = '<p class="empty-msg">Error al cargar tus compras.</p>';
+  }
+}
+
+function renderPurchases() {
+  if (!purchasesContainer) return;
+  if (!purchasedByUser.length) {
+    if (purchasesEmpty) purchasesEmpty.style.display = "block";
+    return;
+  }
+  if (purchasesEmpty) purchasesEmpty.style.display = "none";
+
+  const list = document.createElement('div');
+  list.className = 'books-grid';
+
+  purchasedByUser.forEach((p) => {
+    const info = catalogCache.find(c => (c.isbn || "").toString().toUpperCase() === p.isbn.toUpperCase());
+    const titulo = info?.titulo || `ISBN: ${p.isbn}`;
+    const autor = info?.autor || info?.editorial || "Autor desconocido";
+    const precio = p?.precio ?? info?.precio ?? 0;
+
+    const card = document.createElement('article');
+    card.className = 'book-card';
+    card.innerHTML = `
+      <div class=\"book-type\">MIS LIBROS</div>
+      <div class=\"book-title\">${titulo}</div>
+      <div class=\"book-meta\">Autor/Editorial: ${autor}</div>
+      <div class=\"book-meta\">Precio pagado: $${precio} MXN</div>
+      <div class=\"book-meta\">ISBN: ${p.isbn}</div>
+      <div class=\"book-meta\">Fecha compra: ${p.fecha ? new Date(p.fecha).toLocaleString('es-MX') : '-'}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  purchasesContainer.innerHTML = '';
+  purchasesContainer.appendChild(list);
+}
+
+async function comprarLibro({ titulo, precio, isbn }) {
+  try {
+    const comprador = localStorage.getItem("nombreUsuario") || "";
+    if (!comprador) {
+      alert("Debes iniciar sesión para comprar.");
+      return;
+    }
+    if (!isbn) {
+      alert("Este libro no tiene ISBN disponible.");
+      return;
+    }
+
+    const payload = {
+      Comprador: comprador,
+      Precio: precio ?? 0,
+      FechaCompra: new Date().toISOString(),
+      ISBN: isbn.toUpperCase()
+    };
+
+    const resp = await fetch(`${API_CONTENIDOS}/compras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!resp.ok) {
+      const err = await resp.text();
+      throw new Error(err || 'Error realizando compra');
+    }
+    await loadMyPurchases();
+    await loadCatalog();
+    alert(`Compra realizada: ${titulo}`);
+  } catch (e) {
+    console.error(e);
+    alert('Ocurrió un error al comprar.');
+  }
+}
+
 // ===== Inicializar página =====
-ensureSession();
-loadCatalog();
+async function init() {
+  ensureSession();
+  await loadMyPurchases();
+  await loadCatalog();
+}
+
+init();
