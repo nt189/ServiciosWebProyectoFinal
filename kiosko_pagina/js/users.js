@@ -1,6 +1,6 @@
 // users.js
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = "http://localhost:3000";
 
 const usuariosBody = document.getElementById("usuariosBody");
 const usuariosError = document.getElementById("usuariosError");

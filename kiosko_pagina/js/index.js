@@ -1,5 +1,5 @@
 // ===== Config locales =====
-const API_CONTENIDOS = "http://localhost:5000"; // Flask contenidos
+const API_CONTENIDOS = "http://localhost:3000"; // Flask contenidos
 
 const userNameSpan = document.getElementById("userName");
 const logoutBtn = document.getElementById("logoutBtn");

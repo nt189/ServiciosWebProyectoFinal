@@ -1,7 +1,7 @@
 // admin.js
 
 // URL base del backend Flask
-const API_CONTENIDOS = "http://localhost:5000";
+const API_CONTENIDOS = "http://localhost:3000";
 
 // Referencias al DOM
 const tbody = document.getElementById("productosBody");
@@ -127,7 +127,7 @@ async function cargarProductos() {
     console.error(err);
     tbody.innerHTML = "";
     catalogoError.textContent =
-      "Error al conectar con http://localhost:5000. ¿Está corriendo app.py?";
+      "Error al conectar con http://localhost:3000. ¿Está corriendo el APIgateway o app.py?";
   }
 }
 

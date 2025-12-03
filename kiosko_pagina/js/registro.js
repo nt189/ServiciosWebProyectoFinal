@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5224/api";
+const API_BASE = "http://localhost:3000/api";
 
 const registerForm = document.getElementById("registerForm");
 const registerError = document.getElementById("registerError");

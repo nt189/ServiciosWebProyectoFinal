@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5224/api";
+const API_BASE = "http://localhost:3000";
 
 const loginForm = document.getElementById("loginForm");
 const loginError = document.getElementById("loginError");

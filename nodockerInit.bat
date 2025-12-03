@@ -6,7 +6,7 @@ set BASE_DIR=%~dp0
 echo Iniciando servicios sin Docker...
 
 pushd "%BASE_DIR%webhook"
-REM 1) Webhook (Python/Flask) en puerto 5001
+
 echo Instalando dependencias Python para webhook...
 call py -3 -m pip install flask flask-cors firebase-admin
 echo Iniciando Webhook Flask en http://localhost:5001 ...
@@ -44,6 +44,11 @@ echo Iniciando API Gateway en http://localhost:3000 ...
 start "APIgateway" cmd /c "node apiGateway.js"
 popd
 
+pushd "%BASE_DIR%kiosko_pagina"
+echo Iniciando HTTP server
+start "kiosko_pagina" cmd /c "python -m http.server 8888"
+popd
+
 echo.
 echo Todos los servicios fueron lanzados. Verifica las ventanas abiertas.
 echo - Webhook:          http://localhost:5001
@@ -51,6 +56,7 @@ echo - KioscoDigital:    http://localhost:5000
 echo - GPC (PHP):        http://localhost:5002
 echo - Entrega API:      http://localhost:5003
 echo - API Gateway:      http://localhost:3000
+echo - Página Kiosko:    http://localhost:8888
 echo.
 echo Recuerda ajustar las URLs internas del API Gateway si cambias puertos.
 
