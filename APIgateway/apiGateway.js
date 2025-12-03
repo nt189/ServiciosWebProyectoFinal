@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
       'POST /solicitudes': 'Crear solicitud de producto',
       'GET /solicitudes': 'Listar todas las solicitudes',
       'GET /solicitudes/:producto': 'Obtener solicitudes por producto',
+      'PUT /solicitudes/:producto/:id/estado': 'Actualizar estado de solicitud',
       'POST /compras': 'Registrar compra',
       'GET /compras': 'Listar todas las compras',
       'GET /compras/:isbn': 'Obtener compras por ISBN',
@@ -128,6 +129,16 @@ app.get('/solicitudes', async (req, res) => {
 app.get('/solicitudes/:producto', async (req, res) => {
   try {
     const response = await axios.get(`${MICROSERVICES.gpc}/solicitudes/${req.params.producto}`);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+app.put('/solicitudes/:producto/:id/estado', async (req, res) => {
+  try {
+    const { producto, id } = req.params;
+    const response = await axios.put(`${MICROSERVICES.gpc}/solicitudes/${producto}/${id}/estado`, req.body);
     res.status(response.status).json(response.data);
   } catch (error) {
     handleAxiosError(error, res);

@@ -4,8 +4,110 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin | Request Manager</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
-  
+<body class="bg-base">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-logo">KD</div>
+      <div>
+        <div class="brand-name">Kiosko Digital</div>
+        <div class="brand-sub">Panel de administración</div>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div>
+        <div class="user-label">Conectado como</div>
+        <div class="user-name" id="adminName">Admin</div>
+      </div>
+      <a href="index.html" class="btn btn-outline">Volver al kiosko</a>
+    </div>
+  </header>
+
+  <main class="app-main admin-main">
+    <!-- ================== Solicitudes de Libros ================== -->
+    <section class="panel panel-lg">
+      <div class="panel-header">
+        <div>
+          <h1>Solicitudes de libros</h1>
+          <p>Aprueba solicitudes para añadir libros al catálogo.</p>
+        </div>
+        <button id="btnRefrescarSolicitudes" class="btn btn-secondary">Actualizar</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Solicitante</th>
+              <th>Categoría</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>ISBN</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="solicitudesLibrosBody">
+            <!-- filas generadas por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="msg msg-error" id="solicitudesError"></div>
+      <div class="msg msg-ok" id="solicitudesOk"></div>
+    </section>
+
+    <!-- ================== Aceptar Patrocinadores ================== -->
+    <section class="panel panel-sm">
+      <div class="panel-header">
+        <h2>Registrar patrocinador</h2>
+        <p>Aprueba/da de alta patrocinadores en el sistema.</p>
+      </div>
+
+      <form id="patroForm" class="form-vertical">
+        <div class="form-row">
+          <label class="label" for="patroNombre">Nombre</label>
+          <input class="input" type="text" id="patroNombre" required />
+        </div>
+        <div class="form-row">
+          <label class="label" for="patroGiro">Giro</label>
+          <input class="input" type="text" id="patroGiro" required />
+        </div>
+        <div class="form-row">
+          <label class="label" for="patroNivel">Nivel</label>
+          <input class="input" type="text" id="patroNivel" placeholder="Oro, Plata, Bronce..." required />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Aceptar/Registrar</button>
+          <button type="button" class="btn btn-outline" id="btnLimpiarPatro">Limpiar</button>
+        </div>
+
+        <div class="msg msg-ok" id="patroOk"></div>
+        <div class="msg msg-error" id="patroError"></div>
+      </form>
+
+      <div class="panel-body" style="margin-top:1rem;">
+        <h3 class="panel-title">Patrocinadores actuales</h3>
+        <div class="table-wrapper" style="margin-top:0.5rem;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Giro</th>
+                <th>Nivel</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="patroBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/request_manager.js"></script>
 </body>
 </html>

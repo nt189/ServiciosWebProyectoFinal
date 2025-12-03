@@ -115,6 +115,55 @@ $app->get('/solicitudes/{producto}', function (Request $request, Response $respo
     return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 });
 
+// Actualizar estado de una solicitud (aprobar/rechazar)
+$app->put('/solicitudes/{producto}/{id}/estado', function (Request $request, Response $response, $args) {
+    global $database;
+    $productoKey = strtolower($args['producto']);
+
+    if (!in_array($productoKey, $GLOBALS['productosDisponibles'])) {
+        $response->getBody()->write(json_encode([
+            'status' => 400,
+            'error' => 'La tienda no ofrece ese tipo de producto'
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+    }
+
+    $id = $args['id'];
+    $data = json_decode($request->getBody()->getContents(), true) ?: [];
+    $nuevoEstado = isset($data['Estado']) ? $data['Estado'] : null;
+
+    if (!$nuevoEstado) {
+        $response->getBody()->write(json_encode([
+            'status' => 400,
+            'error' => 'El campo Estado es obligatorio'
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+    }
+
+    $solicitudRefPath = 'solicitudes/' . $productoKey . '/' . $id;
+    $solicitud = $database->getReference($solicitudRefPath)->getValue();
+    if (is_null($solicitud)) {
+        $response->getBody()->write(json_encode([
+            'status' => 404,
+            'error' => 'No se encontró la solicitud especificada'
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+    }
+
+    $database->getReference($solicitudRefPath)->update([
+        'Estado' => $nuevoEstado
+    ]);
+
+    $response->getBody()->write(json_encode([
+        'status' => 200,
+        'message' => 'Estado actualizado',
+        'id' => $id,
+        'producto' => $productoKey,
+        'Estado' => $nuevoEstado
+    ]));
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+});
+
 # Endpoint para registrar compras de productos (create)
 $app->post('/compras', function (Request $request, Response $response) {
     global $database;
