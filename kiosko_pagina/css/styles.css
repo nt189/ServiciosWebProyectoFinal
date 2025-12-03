@@ -89,6 +89,23 @@ body {
 .btn-primary:hover {
   background: #0ea5e9;
 }
+.btn-secondary {
+  background: rgba(56,189,248,0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56,189,248,0.16);
+}
+.btn-secondary:hover {
+  background: rgba(56,189,248,0.18);
+}
+.btn-outline {
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid rgba(56,189,248,0.28);
+  padding: 0.55rem 0.9rem;
+}
+.btn-outline:hover {
+  background: rgba(56,189,248,0.06);
+}
 .btn-success {
   width: 100%;
   margin-top: 1.5rem;
@@ -336,4 +353,94 @@ body {
   border: 1px solid rgba(56,189,248,0.4);
   color: #7dd3fc;
   margin-left: 0.4rem;
+}
+
+/* ================== ADMIN PANEL ================== */
+
+.admin-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem 2rem;
+}
+
+.panel-lg {
+  min-height: 400px;
+}
+
+.panel-sm {
+  align-self: flex-start;
+}
+
+.table-wrapper {
+  max-height: 480px;
+  overflow: auto;
+  border-radius: 1rem;
+  border: 1px solid #25293b;
+  background: radial-gradient(circle at top left, #1e2433 0, #131826 50%, #0c1018 100%);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.55rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.data-table thead {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(90, 205, 120, 0.06);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tag-libro {
+  color: #4ade80;
+}
+.tag-revista {
+  color: #60a5fa;
+}
+.tag-periodico {
+  color: #facc15;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.msg {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.msg-ok {
+  color: #4ade80;
+}
+
+.msg-error {
+  color: #f97373;
 }

@@ -9,8 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const MICROSERVICES = {
-
-
+  kiosco: 'http://localhost:5224/api'
 };
 
 app.use((req, res, next) => {
@@ -23,7 +22,8 @@ app.get('/', (req, res) => {
     message: 'API Gateway funcionando',
     microservicios: {
       gpc: MICROSERVICES.gpc,
-      contenidos: MICROSERVICES.contenidos
+      contenidos: MICROSERVICES.contenidos,
+      kiosco: MICROSERVICES.kiosco
     },
     endpoints: {
       'GET /status': 'Estado de todos los microservicios',
@@ -40,7 +40,15 @@ app.get('/', (req, res) => {
       'GET /contenidos': 'Listar contenidos digitales',
       'GET /contenidos/:id': 'Obtener contenido por ID',
       'PUT /contenidos/:id': 'Actualizar contenido',
-      'DELETE /contenidos/:id': 'Eliminar contenido'
+      'DELETE /contenidos/:id': 'Eliminar contenido',
+      'POST /usuarios/registro': 'Registrar usuario (KioscoDigital.WebAPI)',
+      'POST /usuarios/login': 'Login usuario (KioscoDigital.WebAPI)',
+      'PUT /usuarios/notificaciones/:usuarioId': 'Desactivar notificaciones usuario',
+      'POST /publicaciones/agregar': 'Agregar publicación al catálogo',
+      'GET /publicaciones/catalogo': 'Listar publicaciones del catálogo',
+      'POST /suscripciones/agregar': 'Agregar suscripción (requiere Authorization)',
+      'DELETE /suscripciones/eliminar/:id': 'Eliminar suscripción (requiere Authorization)',
+      'GET /suscripciones/usuario/:usuarioId': 'Listar suscripciones por usuario (requiere Authorization)'
     }
   });
 });
@@ -72,6 +80,19 @@ app.get('/status', async (req, res) => {
       };
     } catch (error) {
       status.contenidos = {
+        status: 'offline',
+        error: error.message
+      };
+    }
+    
+    // KioscoDigital.WebAPI status
+    try {
+      const kioscoResponse = await axios.get(`${MICROSERVICES.kiosco}/Usuarios/login`).catch(() => ({ data: null }));
+      status.kiosco = {
+        status: kioscoResponse && kioscoResponse.data !== null ? 'online' : 'unknown',
+      };
+    } catch (error) {
+      status.kiosco = {
         status: 'offline',
         error: error.message
       };
@@ -220,6 +241,99 @@ app.delete('/contenidos/:id', async (req, res) => {
 });
 
 
+// =============================
+// KioscoDigital.WebAPI: Usuarios
+// =============================
+app.post('/usuarios/registro', async (req, res) => {
+  try {
+    const response = await axios.post(`${MICROSERVICES.kiosco}/Usuarios/registro`, req.body);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+app.post('/usuarios/login', async (req, res) => {
+  try {
+    const response = await axios.post(`${MICROSERVICES.kiosco}/Usuarios/login`, req.body);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+app.put('/usuarios/notificaciones/:usuarioId', async (req, res) => {
+  try {
+    const response = await axios.put(`${MICROSERVICES.kiosco}/Usuarios/notificaciones/${req.params.usuarioId}`);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+// ==================================
+// KioscoDigital.WebAPI: Publicaciones
+// ==================================
+app.post('/publicaciones/agregar', async (req, res) => {
+  try {
+    const response = await axios.post(`${MICROSERVICES.kiosco}/Publicaciones/agregar`, req.body);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+app.get('/publicaciones/catalogo', async (req, res) => {
+  try {
+    const response = await axios.get(`${MICROSERVICES.kiosco}/Publicaciones/catalogo`);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+// ==================================
+// KioscoDigital.WebAPI: Suscripciones
+// ==================================
+function authHeader(req) {
+  const token = req.headers['authorization'] || req.headers['Authorization'];
+  return token ? { Authorization: token } : {};
+}
+
+app.post('/suscripciones/agregar', async (req, res) => {
+  try {
+    const response = await axios.post(`${MICROSERVICES.kiosco}/Suscripciones/agregar`, req.body, {
+      headers: authHeader(req)
+    });
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+app.delete('/suscripciones/eliminar/:id', async (req, res) => {
+  try {
+    const response = await axios.delete(`${MICROSERVICES.kiosco}/Suscripciones/eliminar/${req.params.id}`, {
+      headers: authHeader(req)
+    });
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+app.get('/suscripciones/usuario/:usuarioId', async (req, res) => {
+  try {
+    const response = await axios.get(`${MICROSERVICES.kiosco}/Suscripciones/usuario/${req.params.usuarioId}`, {
+      headers: authHeader(req)
+    });
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    handleAxiosError(error, res);
+  }
+});
+
+
 app.get('/estadisticas', async (req, res) => {
   try {
     const [solicitudes, compras, contenidos, patrocinadores] = await Promise.all([
@@ -296,4 +410,5 @@ app.listen(PORT, () => {
   console.log(`📊 Verificar estado: http://localhost:${PORT}/status`);
   console.log(`🔍 Microservicio GPC: ${MICROSERVICES.gpc}`);
   console.log(`📚 Microservicio Contenidos: ${MICROSERVICES.contenidos}`);
+  console.log(`🧩 KioscoDigital.WebAPI: ${MICROSERVICES.kiosco}`);
 });

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Kiosko – Catálogo</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-base">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-logo">KD</div>
+      <div>
+        <div class="brand-name">Kiosko Digital</div>
+        <div class="brand-sub">Panel de administración</div>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div>
+        <div class="user-label">Conectado como</div>
+        <div class="user-name">Admin</div>
+      </div>
+      <a href="index.html" class="btn btn-outline">Volver al kiosko</a>
+    </div>
+  </header>
+
+  <main class="app-main admin-main">
+    <!-- ================== CATÁLOGO ================== -->
+    <section class="panel panel-lg">
+      <div class="panel-header">
+        <div>
+          <h1>Catálogo de productos</h1>
+          <p>Administra los títulos almacenados en el backend Flask (/contenidos).</p>
+        </div>
+        <button id="btnRefrescar" class="btn btn-secondary">Actualizar lista</button>
+      </div>
+
+      <!-- Tabla de productos -->
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Tipo</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="productosBody">
+            <!-- filas generadas por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="msg msg-error" id="catalogoError"></div>
+      <div class="msg msg-ok" id="catalogoOk"></div>
+    </section>
+
+    <!-- ================== FORMULARIO AL LADO ================== -->
+    <section class="panel panel-sm">
+      <div class="panel-header">
+        <h2 id="formTitulo">Nuevo producto</h2>
+        <p>Usa este formulario para crear o editar títulos.</p>
+      </div>
+
+      <form id="productoForm" class="form-vertical">
+        <!-- hidden para saber si es alta o edición -->
+        <input type="hidden" id="productoId" />
+
+        <div class="form-row">
+          <label class="label" for="titulo">Título</label>
+          <input class="input" type="text" id="titulo" required />
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="tipo">Tipo</label>
+          <select class="input" id="tipo" required>
+            <option value="">Selecciona uno</option>
+            <option value="libro">Libro</option>
+            <option value="revista">Revista</option>
+            <option value="periódico">Periódico</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="categoria">Categoría</label>
+          <input class="input" type="text" id="categoria" placeholder="ciencia, noticias, literatura..." />
+        </div>
+
+        <div class="form-row grid-2">
+          <div>
+            <label class="label" for="precio">Precio</label>
+            <input class="input" type="number" id="precio" step="0.01" min="0" />
+          </div>
+          <div>
+            <label class="label" for="stock">Stock</label>
+            <input class="input" type="number" id="stock" min="0" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="descripcion">Descripción</label>
+          <textarea class="input" id="descripcion" rows="3"></textarea>
+        </div>
+
+        <!-- Campos extra si es libro -->
+        <div class="form-row">
+          <label class="label" for="autor">Autor (solo libros)</label>
+          <input class="input" type="text" id="autor" />
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="isbn">ISBN (solo libros)</label>
+          <input class="input" type="text" id="isbn" />
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="paginas">Páginas (solo libros)</label>
+          <input class="input" type="number" id="paginas" min="0" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+          <button type="button" class="btn btn-outline" id="btnLimpiar">Limpiar</button>
+        </div>
+
+        <div class="msg msg-ok" id="formOk"></div>
+        <div class="msg msg-error" id="formError"></div>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

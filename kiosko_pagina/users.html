@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Kiosko – Usuarios</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-base">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-logo">KD</div>
+      <div>
+        <div class="brand-name">Kiosko Digital</div>
+        <div class="brand-sub">Panel de administración</div>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div>
+        <div class="user-label">Conectado como</div>
+        <div class="user-name">Admin</div>
+      </div>
+      <a href="index.html" class="btn btn-outline">Volver al kiosko</a>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <!-- Lista de usuarios -->
+    <section class="panel panel-lg">
+      <div class="panel-header">
+        <div>
+          <h1>Lista de usuarios</h1>
+          <p>Usuarios registrados en el sistema.</p>
+        </div>
+        <button id="btnRefrescarUsers" class="btn btn-secondary">Actualizar lista</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Registrado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usuariosBody">
+            <!-- filas generadas por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="msg msg-error" id="usuariosError"></div>
+      <div class="msg msg-ok" id="usuariosOk"></div>
+    </section>
+
+    <!-- Formulario lateral (opcional) -->
+    <section class="panel panel-sm">
+      <div class="panel-header">
+        <h2 id="formUsuarioTitulo">Nuevo usuario</h2>
+        <p>Crear o editar usuarios manualmente.</p>
+      </div>
+
+      <form id="usuarioForm" class="form-vertical">
+        <input type="hidden" id="usuarioId" />
+
+        <div class="form-row">
+          <label class="label" for="nombre">Nombre</label>
+          <input class="input" type="text" id="nombre" required />
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="email">Email</label>
+          <input class="input" type="email" id="email" required />
+        </div>
+
+        <div class="form-row">
+          <label class="label" for="rol">Rol</label>
+          <select class="input" id="rol">
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btnGuardarUser">Guardar</button>
+          <button type="button" class="btn btn-outline" id="btnLimpiarUser">Limpiar</button>
+        </div>
+
+        <div class="msg msg-ok" id="formUserOk"></div>
+        <div class="msg msg-error" id="formUserError"></div>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/users.js"></script>
+</body>
+</html>

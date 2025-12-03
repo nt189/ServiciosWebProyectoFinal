@@ -9,7 +9,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 $factory = (new Factory)
     ->withServiceAccount('firebaseCred.json')
-    ->withDatabaseUri('https://frbsws-dc827-default-rtdb.firebaseio.com/');
+    ->withDatabaseUri('https://frbsws-dc827-default-rtdb.firebaseio.com');
 
 $database = $factory->createDatabase();
 
@@ -100,7 +100,7 @@ $app->get('/solicitudes/{producto}', function (Request $request, Response $respo
     if (!in_array($productoKey, $GLOBALS['productosDisponibles'])) {
         $response->getBody()->write(json_encode([
             'status' => 400,
-            'error' => 'La tienda no tiene ese tipo de productos'
+            'error' => 'La tienda no ofrece ese tipo de producto'
         ]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
     }
