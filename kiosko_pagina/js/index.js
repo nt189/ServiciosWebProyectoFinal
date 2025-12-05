@@ -43,7 +43,7 @@ async function loadCatalog() {
   if (!booksContainer) return;
 
   try {
-    const resp = await fetch(`${API_CONTENIDOS}/contenidos?tipo=libro`);
+    const resp = await fetch(`${API_CONTENIDOS}/contenidos`);
     if (!resp.ok) throw new Error("Error al cargar contenidos");
 
     const data = await resp.json();
@@ -52,7 +52,7 @@ async function loadCatalog() {
 
     if (!lista.length) {
       booksContainer.innerHTML =
-        '<p class="empty-msg">No hay libros registrados en este momento.</p>';
+        '<p class="empty-msg">No hay contenidos registrados en este momento.</p>';
       return;
     }
 
@@ -71,7 +71,8 @@ async function loadCatalog() {
       const stock = c.stock ?? 0;
       const isbn = (c.isbn || "").toString();
       const isLibro = (c.tipo === "libro");
-      const yaComprado = isbn ? purchasedIsbns.has(isbn.toUpperCase()) : false;
+      const sku = isbn || String(c.id || "");
+      const yaComprado = sku ? purchasedIsbns.has(sku.toUpperCase()) : false;
 
       card.innerHTML = `
         <div class="book-type">${tipo.toUpperCase()}</div>
@@ -81,19 +82,24 @@ async function loadCatalog() {
         <div class="book-meta">Precio: $${precio} MXN</div>
         <div class="book-meta badge-stock">Stock: ${stock}</div>
       `;
-      if (isLibro) {
+      const canBuy = stock > 0 && !!sku;
+      if (canBuy) {
         const buyBtn = document.createElement("button");
         buyBtn.className = "btn btn-primary";
         buyBtn.textContent = yaComprado ? "Comprado" : "Comprar";
-        buyBtn.disabled = yaComprado || !isbn || stock <= 0;
+        buyBtn.disabled = yaComprado || stock <= 0;
         buyBtn.addEventListener("click", async () => {
-          await comprarLibro({ titulo, precio, isbn });
+          if (isLibro) {
+            await comprarLibro({ titulo, precio, isbn: sku });
+          } else {
+            await comprarArticulo({ titulo, precio, sku });
+          }
         });
         card.appendChild(buyBtn);
       }
       grid.appendChild(card);
     });
-
+    console.log('Catalog loaded:', lista);
     booksContainer.innerHTML = "";
     booksContainer.appendChild(grid);
   } catch (err) {
@@ -223,15 +229,20 @@ function renderPurchases() {
   list.className = 'books-grid';
 
   purchasedByUser.forEach((p) => {
-    const info = catalogCache.find(c => (c.isbn || "").toString().toUpperCase() === p.isbn.toUpperCase());
-    const titulo = info?.titulo || `ISBN: ${p.isbn}`;
+    const info = catalogCache.find(c => {
+      const isbnMatch = (c.isbn || "").toString().toUpperCase() === (p.isbn || "").toUpperCase();
+      const idMatch = String(c.id || "").toUpperCase() === (p.isbn || "").toUpperCase();
+      return isbnMatch || idMatch;
+    });
+    const titulo = info?.titulo || `ID: ${p.isbn}`;
     const autor = info?.autor || info?.editorial || "Autor desconocido";
     const precio = p?.precio ?? info?.precio ?? 0;
+    const tipo = (info?.tipo || 'contenido').toUpperCase();
 
     const card = document.createElement('article');
     card.className = 'book-card';
     card.innerHTML = `
-      <div class=\"book-type\">MIS LIBROS</div>
+      <div class=\"book-type\">MIS ${tipo}</div>
       <div class=\"book-title\">${titulo}</div>
       <div class=\"book-meta\">Autor/Editorial: ${autor}</div>
       <div class=\"book-meta\">Precio pagado: $${precio} MXN</div>
@@ -240,7 +251,7 @@ function renderPurchases() {
     `;
     list.appendChild(card);
   });
-
+  console.log('Rendered purchases:', purchasedByUser);
   purchasesContainer.innerHTML = '';
   purchasesContainer.appendChild(list);
 }
@@ -282,9 +293,48 @@ async function comprarLibro({ titulo, precio, isbn }) {
   }
 }
 
+async function comprarArticulo({ titulo, precio, sku }) {
+  try {
+    const comprador = localStorage.getItem("nombreUsuario") || "";
+    if (!comprador) {
+      alert("Debes iniciar sesión para comprar.");
+      return;
+    }
+    if (!sku) {
+      alert("Este artículo no tiene identificador disponible.");
+      return;
+    }
+
+    const payload = {
+      Comprador: comprador,
+      Precio: precio ?? 0,
+      FechaCompra: new Date().toISOString(),
+      ISBN: sku.toUpperCase()
+    };
+
+    const resp = await fetch(`${API_CONTENIDOS}/compras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!resp.ok) {
+      const err = await resp.text();
+      throw new Error(err || 'Error realizando compra');
+    }
+    await loadMyPurchases();
+    await loadCatalog();
+    alert(`Compra realizada: ${titulo}`);
+  } catch (e) {
+    console.error(e);
+    alert('Ocurrió un error al comprar.');
+  }
+}
+
 // ===== Inicializar página =====
 async function init() {
   ensureSession();
+  // Cargar catálogo primero para tener detalles disponibles al renderizar compras
+  await loadCatalog();
   await loadMyPurchases();
   await loadCatalog();
 }

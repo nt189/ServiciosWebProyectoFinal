@@ -120,7 +120,8 @@ def agregar_contenido():
         if not data or 'titulo' not in data or 'tipo' not in data:
             return jsonify({'error': 'Los campos titulo y tipo son requeridos'}), 400
 
-        tipos_validos = ['periódico', 'revista', 'libro']
+        tipos_validos = ['periódico', 'revista', 'libro', 'comic']
+        print(data['tipo'] not in tipos_validos)
         if data['tipo'] not in tipos_validos:
             return jsonify({'error': f'Tipo debe ser uno de: {", ".join(tipos_validos)}'}), 400
 
@@ -144,7 +145,7 @@ def agregar_contenido():
         if data['tipo'] in ['periódico', 'revista']:
             nuevo_contenido["frecuencia"] = data.get('frecuencia', 'mensual')
             nuevo_contenido["editorial"] = data.get('editorial', '')
-        elif data['tipo'] == 'libro':
+        elif data['tipo'] in ['libro', 'comic']:
             nuevo_contenido["autor"] = data.get('autor', '')
             nuevo_contenido["isbn"] = data.get('isbn', '')
             nuevo_contenido["paginas"] = data.get('paginas', 0)

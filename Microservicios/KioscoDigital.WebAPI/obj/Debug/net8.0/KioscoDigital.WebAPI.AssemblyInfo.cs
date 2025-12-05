@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KioscoDigital.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1c0abce35ea7539bff4718a6322e77023171332")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4556770a1e97a7236efaeb18338c92afa70c3327")]
 [assembly: System.Reflection.AssemblyProductAttribute("KioscoDigital.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KioscoDigital.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
